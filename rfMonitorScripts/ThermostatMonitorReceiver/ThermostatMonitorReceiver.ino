@@ -8,11 +8,10 @@
 #include <SPI.h>
 #include "RF24.h"
 
-//TODO: Need to utilize this... but refactoring is your friend
-//typedef enum {RECEIVER_MODULE = 0, SENDER_MODULE} moduleType; 
+bool isDebug = false;
 
 //TODO: add this to the startup script to track the startup and shotdown times
-struct ModuleStatus {
+struct DataCollection {
  int fanOn;
  int heatOn;
  int coolOn;
@@ -55,41 +54,61 @@ void loop() {
 
   if ( role == 0 ) {
     
-    ModuleStatus receivedPayload, sendPayload;
-    unsigned long got_time;
-
     if( radio.available()){
       // Variable for the received timestamp
-      while (radio.available()) {                                   // While there is data ready
-        radio.read( &receivedPayload, sizeof(receivedPayload) );             // Get the payload
-      }
-      Serial.println("Data read. Recieved data was:");
-      Serial.print("Fan On Status -> ");
-      Serial.println(receivedPayload.fanOn);
-      Serial.print("Heat On Status -> ");    
-      Serial.println(receivedPayload.heatOn);
-      Serial.print("Cooling On Status -> ");
-      Serial.println(receivedPayload.coolOn);
-      Serial.print("Aux Heat On Status -> ");
-      Serial.println(receivedPayload.auxHeatOn);
-      Serial.print("Temperature (F) -> ");
-      Serial.println(receivedPayload.temp);
-      Serial.print("Status Code Received -> ");
-      Serial.println(receivedPayload.statusCode);
-      Serial.print("Values Logged Status-> ");
-      Serial.println(receivedPayload.valuesLogged);   
- 
-      radio.stopListening();             // First, stop listening so we can talk  
-      sendPayload = receivedPayload;
-      sendPayload.statusCode=200;
-      sendPayload.valuesLogged=1;
-      radio.write( &sendPayload, sizeof(sendPayload) );              // Send the final one back.      
-      radio.startListening();                                       // Now, resume listening so we catch the next packets.     
-
+      DataCollection receivedData = readData();
+      sendResponse(receivedData);     
     }
   }
 
 } // Loop
 
+struct DataCollection readData() {
+  DataCollection receivedData;
+  
+  while (radio.available()) {                                   // While there is data ready
+    radio.read( &receivedData, sizeof(receivedData) );          // Get the payload
+  }
+     
+  printData(receivedData);
+  return receivedData;
+}
 
+void sendResponse(struct DataCollection receivedData) {
+  DataCollection sendData;
+  radio.stopListening();                                    // First, stop listening so we can talk  
+  
+  sendData.fanOn = receivedData.fanOn;
+  sendData.heatOn = receivedData.heatOn;
+  sendData.coolOn = receivedData.coolOn;
+  sendData.auxHeatOn = receivedData.auxHeatOn;
+  sendData.temp = receivedData.temp;
+  sendData.statusCode = 200;
+  sendData.valuesLogged = 1;
+
+  if (isDebug) {
+    printData(sendData);
+  }
+  
+  radio.write( &sendData, sizeof(sendData) );              // Send the final one back.      
+  radio.startListening();                                  // Now, resume listening so we catch the next packets.
+}
+
+void printData(struct DataCollection data) {
+    Serial.println("Printing Data");
+    Serial.print("Fan On Status -> ");
+    Serial.println(data.fanOn);
+    Serial.print("Heat On Status -> ");    
+    Serial.println(data.heatOn);
+    Serial.print("Cooling On Status -> ");
+    Serial.println(data.coolOn);
+    Serial.print("Aux Heat On Status -> ");
+    Serial.println(data.auxHeatOn);
+    Serial.print("Temperature (F) -> ");
+    Serial.println(data.temp);
+    Serial.print("Status Code Received -> ");
+    Serial.println(data.statusCode);
+    Serial.print("Values Logged Status-> ");
+    Serial.println(data.valuesLogged);   
+}
 
