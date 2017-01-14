@@ -72,7 +72,7 @@ void loop() {
   DataCollection dataToSend;
   dataToSend = collectData();
   sendData(dataToSend);
-  delay(1500);
+  delay(10000);
   
 } // Loop
 
