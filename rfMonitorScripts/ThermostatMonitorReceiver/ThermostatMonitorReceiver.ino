@@ -112,3 +112,4 @@ void printData(struct DataCollection data) {
     Serial.println(data.valuesLogged);   
 }
 
+
