@@ -133,6 +133,7 @@ void sendData(struct DataCollection dataToSend) {
           
   unsigned long start_time = micros();                             // Take the time, and send it.  This will block until complete
   dataToSend.statusCode = SEND_STATUS_CODE;
+  dataToSend.valuesLogged = 0;
   
   if (!radio.write( &dataToSend, sizeof(dataToSend) )){
     Serial.println(F("failed"));
