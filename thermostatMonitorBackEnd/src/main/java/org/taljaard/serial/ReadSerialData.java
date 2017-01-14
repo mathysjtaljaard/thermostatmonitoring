@@ -48,16 +48,23 @@ public class ReadSerialData {
 		comPort.openPort();
 		comPort.addDataListener(new SerialPortDataListener() {
 		   @Override
-		   public int getListeningEvents() { return SerialPort.LISTENING_EVENT_DATA_AVAILABLE; }
+		   public int getListeningEvents() { 
+			   
+			   return SerialPort.LISTENING_EVENT_DATA_AVAILABLE; }
 		   @Override
 		   public void serialEvent(SerialPortEvent event)
 		   {
 		      if (event.getEventType() != SerialPort.LISTENING_EVENT_DATA_AVAILABLE)
 		         return;
-		      byte[] newData = new byte[comPort.bytesAvailable()];
+		      
+		      int numberOfBytesToRead = comPort.bytesAvailable();
+		      byte[] newData = new byte[numberOfBytesToRead];
 		      int numRead = comPort.readBytes(newData, newData.length);
-		      if (numRead > 0) {
+
+		      if (numRead > 0 && newData.length == numRead) {
 		    	  parseData(newData);
+		      } else {
+		    	  System.err.println("Number of Bits doesn't match data size ");
 		      }
 		   }
 		});
@@ -70,11 +77,9 @@ public class ReadSerialData {
 		
 		for(String value: splitValues) {
 			String[] splits = StringUtils.split(value, ">");
+			receivedThermostatData.setCreateTime(new Timestamp(new DateTime().getMillis()));
 			
-			if (StringUtils.contains(splits[0], "Time")) {
-				receivedThermostatData.setCreateTime(new Timestamp(new DateTime().getMillis()));
-			}
-			else if (StringUtils.contains(splits[0], "Status")) {
+			if (StringUtils.contains(splits[0], "Status")) {
 				String statusOf = splits[0];
 				
 				boolean on = false;
@@ -116,7 +121,7 @@ public class ReadSerialData {
 			diff *= -1;
 		}
 		System.out.println("diff = " + diff);
-		if (diff > 1.0 ) {
+		if (diff > .25) {
 			hasTemperatureChanged = true;
 		}
 		
