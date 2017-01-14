@@ -81,7 +81,11 @@ int isOn(byte pinNumber) {
   int sensorValue = analogRead(pinNumber);
   
   float voltage = sensorValue * (5.0/1023.0);   
-  if (voltage > 4 ) {
+  Serial.print("pin number => " );
+  Serial.print(pinNumber);
+  Serial.print(" Voltage = ");
+  Serial.println(voltage);
+  if (voltage > 4.5 ) {
     Serial.print("voltage on for Pin "); 
         Serial.println(pinNumber);
     return 1;
