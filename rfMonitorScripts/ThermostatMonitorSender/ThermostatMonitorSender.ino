@@ -20,7 +20,6 @@ const int fanOnPin = A0;
 const int heatOnPin = A1;
 const int acOnPin = A2;
 const int auxHeatOnPin = A3;
-const int SEND_STATUS_CODE = 100;
 
 const boolean isDebug = true;
 
@@ -132,7 +131,7 @@ void sendData(struct DataCollection dataToSend) {
   radio.stopListening();                                    // First, stop listening so we can talk.
           
   unsigned long start_time = micros();                             // Take the time, and send it.  This will block until complete
-  dataToSend.statusCode = SEND_STATUS_CODE;
+  dataToSend.statusCode = 100;
   dataToSend.valuesLogged = 0;
   
   if (!radio.write( &dataToSend, sizeof(dataToSend) )){
