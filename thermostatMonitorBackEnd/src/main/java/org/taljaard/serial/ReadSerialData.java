@@ -61,10 +61,15 @@ public class ReadSerialData {
 		      byte[] newData = new byte[numberOfBytesToRead];
 		      int numRead = comPort.readBytes(newData, newData.length);
 
-		      if (numRead > 0 && newData.length == numRead) {
-		    	  parseData(newData);
-		      } else {
-		    	  System.err.println("Number of Bits doesn't match data size ");
+		      try {
+		    	  if (numRead > 0 && newData.length == numRead) {
+			    	  parseData(newData);
+			      } else {
+			    	  System.err.println("Number of Bits doesn't match data size ");
+			      }
+		      } catch(Exception ex) {
+		    	  System.err.println("Exception during parseData. Exception was:");
+		    	  System.err.println(ex);
 		      }
 		   }
 		});
