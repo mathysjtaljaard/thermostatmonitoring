@@ -121,7 +121,7 @@ public class ReadSerialData {
 			diff *= -1;
 		}
 		System.out.println("diff = " + diff);
-		if (diff > .25) {
+		if (diff > .50) {
 			hasTemperatureChanged = true;
 		}
 		
