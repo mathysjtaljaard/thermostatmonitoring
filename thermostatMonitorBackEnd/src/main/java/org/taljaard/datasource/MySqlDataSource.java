@@ -2,39 +2,29 @@ package org.taljaard.datasource;
 
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 public class MySqlDataSource implements IDataSource {
 
-	@Autowired
-	Environment env;
-	
 	private DataSource mySqlDataSource;
 	
-	@Override
-	@Bean(name= "mysqlDataSource")
 	public DataSource getDataSource() {
-
 		if (mySqlDataSource == null) {
-			initializeDataSource(env);
+			initializeDataSource(null);
 		}
-		
-		return mySqlDataSource;
+		return this.mySqlDataSource;
 	}
-
-	@Override
 	
+	@Override
 	public void initializeDataSource(Environment env) {
 		DriverManagerDataSource ds = new DriverManagerDataSource();
-		ds.setDriverClassName(env.getProperty("jdbc.driverClassName"));
-		ds.setUrl(env.getProperty("jdbc.url"));
-		ds.setUsername(env.getProperty("jdbc.username"));
-		ds.setPassword(env.getProperty("jdbc.password"));
-		mySqlDataSource = ds;
-
+		ds.setDriverClassName("com.mysql.jdbc.Driver");
+		ds.setUrl("jdbc:mysql://192.168.1.200:3306/thermostatTrackingdb");
+		ds.setUsername("mathysjt");
+		ds.setPassword("UtE0*IIx9Hta^W&jCjT0X9J2sW@lSm");
+		System.err.println("ds -> " + ds);
+		this.mySqlDataSource = ds;
 	}
 
 }

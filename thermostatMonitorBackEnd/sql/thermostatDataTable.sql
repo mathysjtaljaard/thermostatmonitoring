@@ -1,12 +1,15 @@
-create database thermostatTrackingdb;
-use thermostatTrackingdb;
-create TABLE trackingData (
-  tracking_id int(11) NOT NULL AUTO_INCREMENT,
-  create_time datetime NOT NULL,
-  fanOn boolean NOT NULL,
-  heatOn boolean NOT NULL,
-  auxOn boolean NOT NULL,
-  acOn boolean NOT NULL,
-  temp double NOT NULL,
-  PRIMARY KEY (`tracking_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
+CREATE TABLE thermostatTrackingdb.trackingData (
+  tracking_id INT(11) NOT NULL AUTO_INCREMENT,
+  create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  fanOn TINYINT(1) NOT NULL,
+  heatOn TINYINT(1) NOT NULL,
+  auxOn TINYINT(1) NOT NULL,
+  acOn TINYINT(1) NOT NULL,
+  temp DOUBLE NOT NULL,
+  PRIMARY KEY (tracking_id)
+)
+ENGINE = INNODB
+AUTO_INCREMENT = 3501
+AVG_ROW_LENGTH = 218
+CHARACTER SET utf8
+COLLATE utf8_general_ci;
