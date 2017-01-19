@@ -4,10 +4,10 @@
 //https://github.com/gor181/react-chartjs-2
 //https://github.com/Hacker0x01/react-datepicker/
 import * as React from 'react';
-import {Line} from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
-import {retrieveGivenDaysData} from './services/data_retrieval_service';
+import { retrieveGivenDaysData } from './services/data_retrieval_service';
 
 class Visualization extends React.Component {
 
@@ -35,7 +35,8 @@ class Visualization extends React.Component {
                 pointHitRadius: 10,
                 data: []
             }
-        ]};
+        ]
+    };
 
     constructor() {
         super();
@@ -47,12 +48,15 @@ class Visualization extends React.Component {
     }
 
     componentDidMount() {
-        retrieveGivenDaysData(this.state.startDate, this.state.endDate, (err, data) => {
-            console.log(data);
-            var dataToUpdate = {
-                monitoringData: data
-            };
-            this.setNewState(err, dataToUpdate);
+
+        axios_instance('/thermostat/realtime', {
+            timeout: 20000,
+            method: 'get',
+            responseType: 'json'
+        }).then((response) => {
+            this.setState({
+                monitoringData: response.data
+            });
         });
     }
 
@@ -77,15 +81,15 @@ class Visualization extends React.Component {
         return (
             <div>
                 <DatePicker
-                        selected={this.state.startDate}
-                        selectsStart  startDate={this.state.startDate}
-                        endDate={this.state.endDate}
-                        onChange={(date) => {this.calculateDates(true, date)}} />
+                    selected={this.state.startDate}
+                    selectsStart startDate={this.state.startDate}
+                    endDate={this.state.endDate}
+                    onChange={(date) => { this.calculateDates(true, date) }} />
                 <DatePicker
-                        selected={this.state.endDate}
-                        selectsEnd  startDate={this.state.startDate}
-                        endDate={this.state.endDate}
-                        onChange={(date) => {this.calculateDates(false, date)}} />
+                    selected={this.state.endDate}
+                    selectsEnd startDate={this.state.startDate}
+                    endDate={this.state.endDate}
+                    onChange={(date) => { this.calculateDates(false, date) }} />
                 <div>
                     {data}
                 </div>
