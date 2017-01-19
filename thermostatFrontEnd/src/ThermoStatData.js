@@ -43,6 +43,7 @@ class ThermostatData extends React.Component {
                                 <th>AC on</th>
                                 <th>Heat On</th>
                                 <th>Aux Heat On</th>
+                                <th>Raw Data</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -69,6 +70,7 @@ class ParseData extends React.Component {
             <td>{object.acOn.toString()}</td>
             <td>{object.heatOn.toString()}</td>
             <td>{object.auxHeatOn.toString()}</td>
+            <td>{object.rawData}</td>
        </tr> );
     }
 
