@@ -28,6 +28,8 @@ public class SerialReaderApp {
 	}
 	
 	private static void initializeSerialPort() throws Exception {
+		SerialPort comPort = null;;
+		
 		try {
 			
 			String osName = System.getProperty("os.name");
@@ -36,12 +38,16 @@ public class SerialReaderApp {
 				System.out.printf("Available ports are -> %s\n", commPort.getDescriptivePortName());
 			}
 			
-			SerialPort comPort = SerialPort.getCommPorts()[0];
+			comPort = SerialPort.getCommPorts()[0];
 			comPort.setBaudRate(115200);
 			comPort.openPort();
+			comPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING, 2000, 0);
 			comPort.addDataListener(new SerialPortEventListener(comPort, thermostatDAO));
 		} catch (Exception ex) {
 			ex.printStackTrace(System.err);
+			if (comPort != null) {
+				comPort.closePort();
+			}
 			throw ex;
 		}
 	}

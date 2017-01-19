@@ -34,7 +34,7 @@ public class ThermostatDAOImpl implements ThermostatDAO {
 	@Override
 	public int saveData(ThermostatData data) {
 		SqlParameterSource beanParameterSource = new BeanPropertySqlParameterSource(data);
-		String sql = "INSERT INTO trackingData (create_time, fanOn, heatOn, auxOn, acOn, temp)" + 
+		String sql = "INSERT INTO trackingData (create_time, fanOn, heatOn, auxOn, acOn, temp, rawData)" + 
 					 " VALUES (:createTime, :fanOn, :heatOn, :auxHeatOn, :acOn, :temperature, :rawData)";
 		this.namedParameterJdbcTemplate.execute(sql, beanParameterSource, new PreparedStatementCallback<Object>() {
 
