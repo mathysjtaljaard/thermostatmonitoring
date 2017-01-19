@@ -19,7 +19,7 @@ public class ThermostatDataRowMapper implements RowMapper<ThermostatData> {
 		data.setFanOn(rs.getBoolean("fanOn"));
 		data.setHeatOn(rs.getBoolean("heatOn"));
 		data.setTemperature(rs.getDouble("temp"));
-
+		data.setRawData(rs.getString("rawData"));
 		return data;
 	}
 
