@@ -12,7 +12,9 @@ public class SerialPortEventListener implements SerialPortDataListener {
 	private ThermostatDAO thermostatDAO;
 	
 	public SerialPortEventListener(SerialPort port, ThermostatDAO thermostatDAO) throws Exception {
+		System.out.println("Initializing SerialPortEventListener");
 		this.port = port;
+		this.thermostatDAO = thermostatDAO;
 	}
 
 	@Override
@@ -27,15 +29,20 @@ public class SerialPortEventListener implements SerialPortDataListener {
 		if (event.getEventType() != SerialPort.LISTENING_EVENT_DATA_AVAILABLE) {
 			return;
 		}
-
+		System.out.println(this.toString());
 		try {
 			int numberOfBytesToRead = this.port.bytesAvailable();
-			byte[] newByteData = new byte[numberOfBytesToRead];
+			if (numberOfBytesToRead > 0) {
+				System.out.println("number of bytes to read => " + numberOfBytesToRead);
+				byte[] newByteData = new byte[numberOfBytesToRead];
+				this.port.readBytes(newByteData, newByteData.length);
+				String newData = new String(newByteData);
+				System.out.println("Data received in SerialPortEventListener: " + newData);
+				SerialDataParser parser = new SerialDataParser(newData, this.thermostatDAO);
+				parser.parseData();
+			}
 			
-			this.port.readBytes(newByteData, newByteData.length);
-			String newData = new String(newByteData);
-			SerialDataParser parser = new SerialDataParser(newData, this.thermostatDAO);
-			parser.parseData();
+			/**/
 		} catch (Exception ex) {
 			System.err.println("Exception during parseData. Exception was:");
 			ex.printStackTrace(System.err);

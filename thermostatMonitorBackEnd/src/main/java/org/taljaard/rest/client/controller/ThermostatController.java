@@ -13,7 +13,7 @@ import org.taljaard.model.ThermostatData;
 import org.taljaard.rest.client.services.ThermostatServices;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 @RequestMapping("/thermostat")
 public class ThermostatController {
 

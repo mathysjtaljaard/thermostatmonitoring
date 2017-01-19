@@ -26,11 +26,12 @@ public class SerialDataParser {
 		
 		try {
 			receivedThermostatData.setRawData(this.newData);
-			List<String> splitValues = Arrays.asList(StringUtils.split(this.newData, newLineCharacter));
+			receivedThermostatData.setCreateTime(new Timestamp(new DateTime().getMillis()));
+			
+			List<String> splitValues = Arrays.asList(StringUtils.split(this.newData, "|"));
 			
 			for(String value: splitValues) {
 				String[] splits = StringUtils.split(value, ">");
-				receivedThermostatData.setCreateTime(new Timestamp(new DateTime().getMillis()));
 				
 				if (StringUtils.contains(splits[0], "Status")) {
 					String statusOf = splits[0];
@@ -51,6 +52,7 @@ public class SerialDataParser {
 					}
 				} 
 				else if (StringUtils.contains(splits[0], "Temperature")) {
+					System.out.println("Given temperature value is " + splits[1]);
 					receivedThermostatData.setTemperature(Double.valueOf(StringUtils.trim(splits[1])));
 				}
 			}
@@ -67,8 +69,8 @@ public class SerialDataParser {
 		
     	try {
 	    	ThermostatData storedRecored = collectLastDataEntry();
-			System.out.println("Cached Data:\n" + storedRecored.toString());
-			System.out.println("Received Data:\n" + recievedData.toString());
+			//System.out.println("Cached Data:\n" + storedRecored.toString());
+			//System.out.println("Received Data:\n" + recievedData.toString());
 			
 			boolean hasFanOnStatusChanged = (recievedData.isFanOn() != storedRecored.isFanOn());
 			boolean hasHeatOnStatusChanged = (recievedData.isHeatOn() != storedRecored.isHeatOn());
@@ -86,14 +88,18 @@ public class SerialDataParser {
 				hasTemperatureChanged = true;
 			}
 			
-			if (recievedData.getCreateTime() != null && recievedData.getTemperature() != 0) {
+			if (recievedData.getCreateTime() == null) {
+				System.err.println("Create Time was null, Unable to write to database.");
+			} else if (recievedData.getTemperature() == 0) {
+				System.err.println("Temperature was 0, Unable to write data to database.");
+				System.err.println("Raw data was -> " + recievedData.getRawData());
+				
+			} else {
 				if (hasAcOnStatusChanged || hasAuxHeatOnStatusChanged || hasFanOnStatusChanged 
 																		|| hasHeatOnStatusChanged || hasTemperatureChanged) {
 					this.thermostatDAO.saveData(recievedData);
 				}
-			} else {
-				System.err.println("Unable to write data with null create time.");
-			}
+			} 
     	} catch(Exception ex) {
     		ex.printStackTrace(System.err);
     		throw ex;

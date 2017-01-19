@@ -95,29 +95,25 @@ void sendResponse(struct DataCollection receivedData) {
 }
 
 void printData(struct DataCollection data) {
-    String fanStatusString = String("Fan On Status -> " + data.fanOn + " | ");
-    String HeatStatusString = String("Heat On Status -> " + data.heatOn + " | ");
-    String ACStatusString = String("Cooling On Status -> " + data.coolOn + " | ");  
-    String AuxStatusString = String("Aux Heat On Status -> " + data.auxHeatOn + " | ");  
-    String TempReadingString = String("Temperature (F) -> " + data.temp); 
-    
-    String dataToWrite = String(fanStatusString + HeatStatusString + ACStatusString + AuxStatusString + TempReadingString);
-    write(dataToWrite);
-    /*Serial.println("Printing Data");
-    Serial.print("Fan On Status -> ");
-    Serial.println(data.fanOn);
-    Serial.print("Heat On Status -> ");    
-    Serial.println(data.heatOn);
-    Serial.print("Cooling On Status -> ");
-    Serial.println(data.coolOn);
-    Serial.print("Aux Heat On Status -> ");
-    Serial.println(data.auxHeatOn);
-    Serial.print("Temperature (F) -> ");
-    Serial.println(data.temp);
-    Serial.print("Status Code Received -> ");
-    Serial.println(data.statusCode);
-    Serial.print("Values Logged Status-> ");
-    Serial.println(data.valuesLogged);  */ 
+    String pipe = String(" | ");
+    String fanStatusString = String("Fan On Status -> "); 
+    String fanStatus= String(data.fanOn, DEC); 
+    String fanCombo = String(fanStatusString + fanStatus + pipe);
+    String HeatStatusString = String("Heat On Status -> ");
+    String HeatStatus = String(data.heatOn, DEC);
+    String HeatCombo = String(HeatStatusString + HeatStatus + pipe);
+    String ACStatusString = String("Cooling On Status -> ");
+    String ACStatus = String(data.coolOn, DEC);
+    String ACCombo = String(ACStatusString + ACStatus + pipe);
+    String AuxStatusString = String("Aux Heat On Status -> ");
+    String AuxStatus = String(data.auxHeatOn);
+    String AuxCombo = String(AuxStatusString + AuxStatus + pipe); 
+    String TempReadingString = String("Temperature (F) -> ");
+    String TempReading = String(data.temp, 3); 
+    String TempCombo = String(TempReadingString + TempReading);
+    String dataToWrite = String(fanCombo + HeatCombo +  ACCombo + AuxCombo + TempCombo);
+    char *p = const_cast<char*>(dataToWrite.c_str());
+    Serial.write(p);
 }
 
 
