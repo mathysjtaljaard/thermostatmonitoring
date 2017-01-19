@@ -2,11 +2,12 @@
  * Created by mathysjtaljaard on 1/16/17.
  */
 //https://github.com/gor181/react-chartjs-2
+//https://github.com/Hacker0x01/react-datepicker/
 import * as React from 'react';
 import {Line} from 'react-chartjs-2';
-import axios from 'axios';
-
-var axios_instance;
+import DatePicker from 'react-datepicker';
+import moment from 'moment';
+import {retrieveGivenDaysData} from './services/data_retrieval_service';
 
 class Visualization extends React.Component {
 
@@ -36,32 +37,87 @@ class Visualization extends React.Component {
             }
         ]};
 
-    constructor(props) {
-        super(props);
-        this.state = {monitoringData: []};
-        axios_instance = axios.create({
-            baseURL: 'http://192.168.1.10:8080'
-        });
+    constructor() {
+        super();
+        this.state = {
+            monitoringData: [],
+            startDate: moment(),
+            endDate: moment()
+        };
     }
 
     componentDidMount() {
-        axios_instance('/thermostat/realtime', {
-            timeout: 20000,
-            method: 'get',
-            responseType: 'json'
-        }).then((response) => {
-            this.setState({
-                monitoringData: response.data
-            });
+        retrieveGivenDaysData(this.state.startDate, this.state.endDate, (err, data) => {
+            console.log(data);
+            var dataToUpdate = {
+                monitoringData: data
+            };
+            this.setNewState(err, dataToUpdate);
         });
     }
 
+    componentDidUpdate() {
+        console.log('componentDidUpdate');
+    }
+
+    componentWillUnmount() {
+        console.log('componentWillUnmount');
+    }
     render() {
+        var data = null;
+        console.log('Rendering');
         if (this.state.monitoringData.length > 0) {
-            return  <Line data={this.generateLineChartData()} width={600} height={250} />;
+            console.log('have data');
+            data = <Line data={this.generateLineChartData()} width={600} height={250} />
         } else {
-            return <Line data={this.lineChartData}  width={600} height={250} />;
+            console.log('have no data');
+            data = <h1>No Data To Display</h1>
         }
+
+        return (
+            <div>
+                <DatePicker
+                        selected={this.state.startDate}
+                        selectsStart  startDate={this.state.startDate}
+                        endDate={this.state.endDate}
+                        onChange={(date) => {this.calculateDates(true, date)}} />
+                <DatePicker
+                        selected={this.state.endDate}
+                        selectsEnd  startDate={this.state.startDate}
+                        endDate={this.state.endDate}
+                        onChange={(date) => {this.calculateDates(false, date)}} />
+                <div>
+                    {data}
+                </div>
+            </div>
+        );
+    }
+
+    calculateDates(isStartDateChange, newDate) {
+        var startDate = this.state.startDate;
+        var endDate = this.state.endDate;
+
+        if (isStartDateChange) {
+            startDate = newDate;
+            if (endDate.isBefore(newDate)) {
+                endDate = newDate;
+            }
+        } else {
+            endDate = newDate;
+            if (startDate.isAfter(newDate)) {
+                startDate = newDate;
+            }
+        }
+
+        retrieveGivenDaysData(startDate, endDate, (err, data) => {
+            console.log('callback called');
+            var dataToUpdate = {
+                startDate: startDate,
+                endDate: endDate,
+                monitoringData: data
+            };
+            this.setNewState(err, dataToUpdate);
+        });
     }
 
     generateLineChartData() {
@@ -78,6 +134,16 @@ class Visualization extends React.Component {
         var date = new Date(timestamp);
         var adjustedDate = date - (date.getTimezoneOffset() * 60 * 1000);
         return new Date(adjustedDate).toISOString();
+    }
+
+    setNewState(err, data) {
+
+        if (err) {
+            console.log(err);
+        } else {
+            console.log('setNewState', data);
+            this.setState(data);
+        }
     }
 }
 
