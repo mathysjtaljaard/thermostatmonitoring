@@ -95,7 +95,15 @@ void sendResponse(struct DataCollection receivedData) {
 }
 
 void printData(struct DataCollection data) {
-    Serial.println("Printing Data");
+    String fanStatusString = String("Fan On Status -> " + data.fanOn + " | ");
+    String HeatStatusString = String("Heat On Status -> " + data.heatOn + " | ");
+    String ACStatusString = String("Cooling On Status -> " + data.coolOn + " | ");  
+    String AuxStatusString = String("Aux Heat On Status -> " + data.auxHeatOn + " | ");  
+    String TempReadingString = String("Temperature (F) -> " + data.temp); 
+    
+    String dataToWrite = String(fanStatusString + HeatStatusString + ACStatusString + AuxStatusString + TempReadingString);
+    write(dataToWrite);
+    /*Serial.println("Printing Data");
     Serial.print("Fan On Status -> ");
     Serial.println(data.fanOn);
     Serial.print("Heat On Status -> ");    
@@ -109,7 +117,7 @@ void printData(struct DataCollection data) {
     Serial.print("Status Code Received -> ");
     Serial.println(data.statusCode);
     Serial.print("Values Logged Status-> ");
-    Serial.println(data.valuesLogged);   
+    Serial.println(data.valuesLogged);  */ 
 }
 
 
