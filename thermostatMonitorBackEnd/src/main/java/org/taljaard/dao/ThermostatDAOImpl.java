@@ -87,4 +87,10 @@ public class ThermostatDAOImpl implements ThermostatDAO {
 		return this.namedParameterJdbcTemplate.query(sql, parameterMap, new ThermostatDataRowMapper());
 	}
 
+	@Override
+	public List<ThermostatData> getLastDataEntry() {
+		String sql = "Select * from trackingData order by tracking_id DESC limit 1";
+		return this.namedParameterJdbcTemplate.query(sql, new ThermostatDataRowMapper());
+	}
+
 }

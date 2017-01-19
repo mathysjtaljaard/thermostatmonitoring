@@ -2,17 +2,19 @@ package org.taljaard.model;
 
 import java.sql.Timestamp;
 
+import org.joda.time.DateTime;
+
 public class ThermostatData {
 
 	private int id;
+	private String createTimeISO;
 	private Timestamp createTime;
-
 	private boolean fanOn;
 	private boolean heatOn;
 	private boolean auxHeatOn;
 	private boolean acOn;
 	private double temperature;
-
+	
 	public ThermostatData() {
 	}
 
@@ -20,8 +22,13 @@ public class ThermostatData {
 		return createTime;
 	}
 
+	public String getCreateTimeISO() {
+		return createTimeISO;
+	}
+
 	public void setCreateTime(Timestamp createTime) {
 		this.createTime = createTime;
+		this.createTimeISO = new DateTime(createTime.getTime()).toString();
 	}
 
 	public int getId() {

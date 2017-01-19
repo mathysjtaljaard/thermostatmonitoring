@@ -1,17 +1,38 @@
-/**
- * Created by mathysjtaljaard on 1/16/17.
- */
 import * as React from 'react';
-import data from '../public/thermostatData.json';
-import style from './ThermostatStyle.css';
+import axios from 'axios';
+
+var axios_instance;
+import './ThermostatStyle.css';
 
 class ThermostatData extends React.Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {monitoringData: []};
+        axios_instance = axios.create({
+            baseURL: 'http://192.168.1.10:8080'
+        });
+    }
+
+    componentDidMount() {
+        axios_instance('/thermostat/realtime', {
+            timeout: 20000,
+            method: 'get',
+            responseType: 'json'
+        }).then((response) => {
+            this.setState({
+                monitoringData: response.data
+            });
+        });
+    }
+
+    componentWillMount() {
+
+    }
+
     render() {
-        console.log(data);
         return (
             <div>
-                <p>Thermostat Data</p>
                 <div>
                     <table>
                         <thead>
@@ -25,10 +46,10 @@ class ThermostatData extends React.Component {
                             </tr>
                         </thead>
                         <tbody>
-                            {
-                                data.map((object) => {
-                                    return <ParseData key={object.id} value={object}/>
-                                })
+                            { this.state.monitoringData.length > 0 &&
+                              this.state.monitoringData.map((object) => {
+                                 return <ParseData key={object.id} value={object}/>
+                              })
                             }
                         </tbody>
                     </table>
@@ -40,7 +61,6 @@ class ThermostatData extends React.Component {
 
 class ParseData extends React.Component {
     render() {
-        console.log('In parseData -> ',this.props.value);
         var object = this.props.value;
         return (<tr key={object.id}>
             <td>{this.formatDate(object.createTime)}</td>
@@ -53,11 +73,10 @@ class ParseData extends React.Component {
     }
 
     formatDate(timeStamp) {
-        console.log('received value', timeStamp);
         var date = new Date(timeStamp);
-        return date.toISOString();
+        var adjustedDate = date - (date.getTimezoneOffset() * 60 * 1000);
+        return new Date(adjustedDate).toISOString();
     }
 }
-
 
 export default ThermostatData;

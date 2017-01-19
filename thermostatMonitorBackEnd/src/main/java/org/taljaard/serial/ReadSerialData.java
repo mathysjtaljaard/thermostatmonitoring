@@ -4,6 +4,8 @@ import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.swing.plaf.synth.SynthSeparatorUI;
+
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -28,51 +30,64 @@ public class ReadSerialData {
 	static ThermostatDAOImpl thermostatDAOImpl;
 	
 	public static void main(String args[]) {
-		
-		dataSource = new DriverManagerDataSource();
-		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-		dataSource.setUrl("jdbc:mysql://192.168.1.200:3306/thermostatTrackingdb");
-		dataSource.setUsername("mathysjt");
-		dataSource.setPassword("UtE0*IIx9Hta^W&jCjT0X9J2sW@lSm");
-		
-		thermostatDAOImpl = new ThermostatDAOImpl(dataSource);
-		
-		String osName = System.getProperty("os.name");
-		System.out.printf("Ports available on Operating system: %s\n\n", osName);
-		for (SerialPort commPort: SerialPort.getCommPorts()) {
-			System.out.printf("Available ports are -> %s\n", commPort.getDescriptivePortName());
+		try {
+			initializeDatabase();
+			String osName = System.getProperty("os.name");
+			System.out.printf("Ports available on Operating system: %s\n\n", osName);
+			for (SerialPort commPort: SerialPort.getCommPorts()) {
+				System.out.printf("Available ports are -> %s\n", commPort.getDescriptivePortName());
+			}
+			
+			SerialPort comPort = SerialPort.getCommPorts()[0];
+			comPort.setBaudRate(115200);
+			comPort.openPort();
+			comPort.addDataListener(new SerialPortDataListener() {
+			   @Override
+			   public int getListeningEvents() { 
+				   
+				   return SerialPort.LISTENING_EVENT_DATA_AVAILABLE; }
+			   @Override
+			   public void serialEvent(SerialPortEvent event)
+			   {
+			      if (event.getEventType() != SerialPort.LISTENING_EVENT_DATA_AVAILABLE)
+			         return;
+			      
+			      int numberOfBytesToRead = comPort.bytesAvailable();
+			      byte[] newData = new byte[numberOfBytesToRead];
+			      comPort.readBytes(newData, newData.length);
+			      System.out.println(new String(newData));
+			      try {
+				     parseData(newData);
+			      } catch(Exception ex) {
+			    	  System.err.println("Exception during parseData. Exception was:");
+			    	  ex.printStackTrace(System.err);
+			      }
+			   }
+			});
+		} catch(Exception ex) {
+			System.err.println("Exception was: ");
+			ex.printStackTrace(System.err);
 		}
 		
-		SerialPort comPort = SerialPort.getCommPorts()[0];
-		comPort.setBaudRate(115200);
-		comPort.openPort();
-		comPort.addDataListener(new SerialPortDataListener() {
-		   @Override
-		   public int getListeningEvents() { 
-			   
-			   return SerialPort.LISTENING_EVENT_DATA_AVAILABLE; }
-		   @Override
-		   public void serialEvent(SerialPortEvent event)
-		   {
-		      if (event.getEventType() != SerialPort.LISTENING_EVENT_DATA_AVAILABLE)
-		         return;
-		      
-		      int numberOfBytesToRead = comPort.bytesAvailable();
-		      byte[] newData = new byte[numberOfBytesToRead];
-		      int numRead = comPort.readBytes(newData, newData.length);
-
-		      try {
-		    	  if (numRead > 0 && newData.length == numRead) {
-			    	  parseData(newData);
-			      } else {
-			    	  System.err.println("Number of Bits doesn't match data size ");
-			      }
-		      } catch(Exception ex) {
-		    	  System.err.println("Exception during parseData. Exception was:");
-		    	  System.err.println(ex);
-		      }
-		   }
-		});
+	}
+	
+	static boolean initializeDatabase() throws Exception {
+		try {
+			dataSource = new DriverManagerDataSource();
+			dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+			dataSource.setUrl("jdbc:mysql://192.168.1.200:3306/thermostatTrackingdb");
+			dataSource.setUsername("mathysjt");
+			dataSource.setPassword("UtE0*IIx9Hta^W&jCjT0X9J2sW@lSm");
+			
+			thermostatDAOImpl = new ThermostatDAOImpl(dataSource);
+			List<ThermostatData> lastEntry = thermostatDAOImpl.getLastDataEntry();
+			cachedData = lastEntry.get(0);
+			return true;
+		} catch(Exception ex) {
+			System.err.println("Exception during initialization");
+			ex.printStackTrace(System.err);
+			throw ex;
+		}
 	}
 	
 	static void parseData(byte[] receivedData) {
