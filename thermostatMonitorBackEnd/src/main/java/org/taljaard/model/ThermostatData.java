@@ -14,6 +14,7 @@ public class ThermostatData {
 	private boolean auxHeatOn;
 	private boolean acOn;
 	private double temperature;
+	private String rawData;
 	
 	public ThermostatData() {
 	}
@@ -77,6 +78,14 @@ public class ThermostatData {
 
 	public void setAcOn(boolean acOn) {
 		this.acOn = acOn;
+	}
+	
+	public String getRawData() {
+		return rawData;
+	}
+
+	public void setRawData(String rawData) {
+		this.rawData = rawData;
 	}
 
 	public String toString() {
