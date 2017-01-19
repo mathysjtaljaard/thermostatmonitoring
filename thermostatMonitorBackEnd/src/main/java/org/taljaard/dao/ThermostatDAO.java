@@ -13,5 +13,6 @@ public interface ThermostatDAO {
 	public ThermostatData updateData(ThermostatData updatedData);
 	public int deleteData(ThermostatData data);
 	public List<ThermostatData> getDataWithinTimeRange(DateTime start, DateTime end);
+	public List<ThermostatData> getLastDataEntry();
 	
 }

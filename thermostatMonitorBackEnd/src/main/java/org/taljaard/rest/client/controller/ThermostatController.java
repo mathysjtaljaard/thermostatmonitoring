@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -12,6 +13,7 @@ import org.taljaard.model.ThermostatData;
 import org.taljaard.rest.client.services.ThermostatServices;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/thermostat")
 public class ThermostatController {
 
@@ -33,4 +35,5 @@ public class ThermostatController {
 		
 		return data;
 	}
+	
 }
