@@ -23,10 +23,10 @@ public class ThermostatServices {
 		return data;
 	}
 	
-	public List<ThermostatData> getGivensDaysData(DateTime day) {
+	public List<ThermostatData> getDataWithinRange(DateTime startDate, DateTime endDate) {
 		
-		DateTime start = day.withTimeAtStartOfDay();
-		DateTime end = day.plusDays(1);
+		DateTime start = startDate.withTimeAtStartOfDay();
+		DateTime end = endDate.plusDays(1).withTimeAtStartOfDay();
 		
 		List<ThermostatData> data = thermostatDataAccessObject.getDataWithinTimeRange(start, end);
 		

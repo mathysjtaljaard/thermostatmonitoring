@@ -7,36 +7,10 @@ import * as React from 'react';
 import { Line } from 'react-chartjs-2';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
-import { retrieveGivenDaysData } from './services/data_retrieval_service';
+import {retrieveGivenDaysData} from './services/data_retrieval_service';
+import {getNewLineChartTemplate} from './chart_templates/lineChartTemplate';
 
 class Visualization extends React.Component {
-
-    lineChartData = {
-        labels: [],
-        datasets: [
-            {
-                label: 'Thermostat Data',
-                fill: false,
-                lineTension: 0.1,
-                backgroundColor: 'rgba(75,192,192,0.4)',
-                borderColor: 'rgba(75,192,192,1)',
-                borderCapStyle: 'butt',
-                borderDash: [],
-                borderDashOffset: 0.0,
-                borderJoinStyle: 'miter',
-                pointBorderColor: 'rgba(75,192,192,1)',
-                pointBackgroundColor: '#fff',
-                pointBorderWidth: 1,
-                pointHoverRadius: 5,
-                pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-                pointHoverBorderColor: 'rgba(220,220,220,1)',
-                pointHoverBorderWidth: 2,
-                pointRadius: 1,
-                pointHitRadius: 10,
-                data: []
-            }
-        ]
-    };
 
     constructor() {
         super();
@@ -70,6 +44,7 @@ class Visualization extends React.Component {
     render() {
         var data = null;
         console.log('Rendering');
+        console.log('Monitoring data size=> ', this.state.monitoringData.length);
         if (this.state.monitoringData.length > 0) {
             console.log('have data');
             data = <Line data={this.generateLineChartData()} width={600} height={250} />
@@ -125,13 +100,14 @@ class Visualization extends React.Component {
     }
 
     generateLineChartData() {
+        var template = getNewLineChartTemplate();
         this.state.monitoringData.forEach((object) => {
-            this.lineChartData.labels.push(this.getDateFormat(object.createTime));
-            this.lineChartData.datasets[0].data.push(object.temperature);
+            template.labels.push(this.getDateFormat(object.createTime));
+            template.datasets[0].data.push(object.temperature);
         });
 
-        this.lineChartData.datasets[0].label = 'Thermostat Data - ' + new Date(this.state.monitoringData[0].createTime).toDateString();
-        return this.lineChartData;
+        template.datasets[0].label = 'Thermostat Data - ' + new Date(this.state.monitoringData[0].createTime).toDateString();
+        return template;
     }
 
     getDateFormat(timestamp) {
