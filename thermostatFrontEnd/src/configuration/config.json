@@ -4,7 +4,7 @@
   "rangePath": "/range?start={startDate}&end={endDate}",
   "realtimePath": "/realtime",
   "axiosConfig": {
-    "baseURL": "http://192.168.1.8:8080/thermostat",
+    "baseURL": "http://localhost:8080/thermostat",
     "method": "get",
     "timeout": 5000,
     "responseType": "json"
