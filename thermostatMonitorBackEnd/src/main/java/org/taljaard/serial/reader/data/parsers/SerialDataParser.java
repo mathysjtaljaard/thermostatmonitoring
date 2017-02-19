@@ -69,8 +69,6 @@ public class SerialDataParser {
 		
     	try {
 	    	ThermostatData storedRecored = collectLastDataEntry();
-			//System.out.println("Cached Data:\n" + storedRecored.toString());
-			//System.out.println("Received Data:\n" + recievedData.toString());
 			
 			boolean hasFanOnStatusChanged = (recievedData.isFanOn() != storedRecored.isFanOn());
 			boolean hasHeatOnStatusChanged = (recievedData.isHeatOn() != storedRecored.isHeatOn());
