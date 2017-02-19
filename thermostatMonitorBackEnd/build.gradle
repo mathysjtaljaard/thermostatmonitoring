@@ -25,6 +25,17 @@ repositories {
 	mavenCentral()
 }
 
+allprojects {
+	task hello << { tasks -> println "I'm $task.project.name"}
+}
+
+subprojects {
+	apply plugin: "java"
+	repositories {
+		mavenCentral()
+	}
+}
+
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-actuator')
 	//compile('org.springframework.boot:spring-boot-starter-data-mongodb')
