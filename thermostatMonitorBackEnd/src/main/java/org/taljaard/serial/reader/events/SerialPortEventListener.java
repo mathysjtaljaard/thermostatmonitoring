@@ -38,7 +38,6 @@ public class SerialPortEventListener implements SerialPortDataListener {
 				byte[] newByteData = new byte[numberOfBytesToRead];
 				this.port.readBytes(newByteData, newByteData.length);
 				String newData = new String(newByteData);
-				System.out.println("Data received in SerialPortEventListener: " + newData);
 				SerialDataParser parser = new SerialDataParser(newData, this.thermostatDAO);
 				parser.parseData();
 			}
