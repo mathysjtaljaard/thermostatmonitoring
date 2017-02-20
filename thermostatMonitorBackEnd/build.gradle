@@ -23,19 +23,16 @@ targetCompatibility = 1.8
 
 repositories {
 	mavenCentral()
-}
-
-allprojects {
-	task hello << { tasks -> println "I'm $task.project.name"}
-}
-
-subprojects {
-	apply plugin: "java"
-	repositories {
-		mavenCentral()
+	maven {
+		url "http://repo.opennms.org/maven2/"
 	}
 }
 
+eclipse {
+	classpath {
+		downloadSources=true
+	}
+}
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-actuator')
 	//compile('org.springframework.boot:spring-boot-starter-data-mongodb')
@@ -57,5 +54,8 @@ dependencies {
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	// https://mvnrepository.com/artifact/commons-io/commons-io
     compile group: 'commons-io', name: 'commons-io', version: '2.4'
+    
+	// https://mvnrepository.com/artifact/org.rxtx/rxtx
+	compile group: 'org.rxtx', name: 'rxtx', version: '2.2pre2'
 	
 }

@@ -12,13 +12,13 @@ import org.taljaard.model.ThermostatData;
 public class ThermostatServices {
 
 	@Autowired
-	ThermostatDAO thermostatDataAccessObject;
+	ThermostatDAO thermostatDAO;
 	
 	public List<ThermostatData> getLast4HoursData() {
 		DateTime end = new DateTime();
 		DateTime start = end.minusHours(4);
 		
-		List<ThermostatData> data = thermostatDataAccessObject.getDataWithinTimeRange(start, end);
+		List<ThermostatData> data = thermostatDAO.getDataWithinTimeRange(start, end);
 		
 		return data;
 	}
@@ -28,7 +28,7 @@ public class ThermostatServices {
 		DateTime start = startDate.withTimeAtStartOfDay();
 		DateTime end = endDate.plusDays(1).withTimeAtStartOfDay();
 		
-		List<ThermostatData> data = thermostatDataAccessObject.getDataWithinTimeRange(start, end);
+		List<ThermostatData> data = thermostatDAO.getDataWithinTimeRange(start, end);
 		
 		return data;
 	}

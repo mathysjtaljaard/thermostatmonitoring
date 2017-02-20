@@ -13,18 +13,13 @@ import org.taljaard.datasource.MySqlDataSource;
 import org.taljaard.serial.reader.app.SerialReaderApp;
 
 @SpringBootApplication
-@ComponentScan(basePackages={"org.taljaard.rest.client"})
+@ComponentScan()
 public class ThermostatRestClient {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ThermostatRestClient.class, args);
 	}
 	
-	@Bean
-	SerialReaderApp SerialReaderApp() {
-		SerialReaderApp serialReaderApp = new SerialReaderApp();
-		return serialReaderApp;
-	}
 	@Bean
 	DataSource dataSource() {
 		IDataSource dataSource = new MySqlDataSource();
@@ -33,7 +28,11 @@ public class ThermostatRestClient {
 	
 	@Bean
 	ThermostatDAO thermostatDAO(DataSource dataSource) {
-		ThermostatDAO dao = new ThermostatDAOImpl(dataSource);
-		return dao;
+		return new ThermostatDAOImpl(dataSource);
+	}
+	
+	@Bean
+	SerialReaderApp serialReaderApp(ThermostatDAO thermostatDAO) {
+		return new SerialReaderApp(thermostatDAO);
 	}
 }
