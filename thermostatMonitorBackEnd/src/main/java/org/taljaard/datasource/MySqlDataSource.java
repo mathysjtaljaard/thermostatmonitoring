@@ -23,7 +23,6 @@ public class MySqlDataSource implements IDataSource {
 		ds.setUrl("jdbc:mysql://192.168.1.200:3306/thermostatTrackingdb");
 		ds.setUsername("mathysjt");
 		ds.setPassword("UtE0*IIx9Hta^W&jCjT0X9J2sW@lSm");
-		System.err.println("ds -> " + ds);
 		this.mySqlDataSource = ds;
 	}
 

@@ -1,19 +1,17 @@
 package org.taljaard.serial.reader.app;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.taljaard.dao.ThermostatDAO;
 import org.taljaard.serial.reader.events.SerialPortEventListener;
 
 import com.fazecast.jSerialComm.SerialPort;
 
-@Component
 public class SerialReaderApp {
 
-	@Autowired
 	private ThermostatDAO thermostatDAO;
 	
-	public SerialReaderApp() {
+	public SerialReaderApp( ThermostatDAO thermostatDAO) {
+		System.out.println("ThermostatDAO dao " + thermostatDAO);
+		this.thermostatDAO = thermostatDAO;
 		init();
 	}
 	
@@ -31,8 +29,7 @@ public class SerialReaderApp {
 		SerialPort comPort = null;
 		
 		try {
-			
-			String osName = System.getProperty("os.name");
+ 			String osName = System.getProperty("os.name");
 			System.out.printf("Ports available on Operating system: %s\n\n", osName);
 
 			if (SerialPort.getCommPorts() != null && SerialPort.getCommPorts().length > 0) {

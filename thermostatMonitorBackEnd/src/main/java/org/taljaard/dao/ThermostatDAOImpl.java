@@ -11,7 +11,6 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import org.joda.time.DateTime;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -22,13 +21,10 @@ import org.taljaard.model.ThermostatData;
 
 public class ThermostatDAOImpl implements ThermostatDAO {
 	
-	@Autowired
-	DataSource dataSource;
-	
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 	
 	public ThermostatDAOImpl(DataSource dataSource) {
-		namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+		this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
 	}
 
 	@Override
