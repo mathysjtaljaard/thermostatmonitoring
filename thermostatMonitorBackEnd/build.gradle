@@ -52,10 +52,8 @@ dependencies {
 
 	runtime('mysql:mysql-connector-java')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
+	
 	// https://mvnrepository.com/artifact/commons-io/commons-io
     compile group: 'commons-io', name: 'commons-io', version: '2.4'
     
-	// https://mvnrepository.com/artifact/org.rxtx/rxtx
-	compile group: 'org.rxtx', name: 'rxtx', version: '2.2pre2'
-	
 }

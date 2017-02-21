@@ -1,5 +1,6 @@
 package org.taljaard.serial.reader.events;
 
+import org.apache.commons.lang3.StringUtils;
 import org.taljaard.dao.ThermostatDAO;
 import org.taljaard.serial.reader.data.parsers.SerialDataParser;
 
@@ -26,20 +27,18 @@ public class SerialPortEventListener implements SerialPortDataListener {
 
 	@Override
 	public void serialEvent(SerialPortEvent event) {
-		
 		if (event.getEventType() != SerialPort.LISTENING_EVENT_DATA_AVAILABLE) {
 			return;
 		}
 		
 		try {
 			int numberOfBytesToRead = this.port.bytesAvailable();
-			if (numberOfBytesToRead > 100) {
-				byte[] newByteData = new byte[numberOfBytesToRead];
-				this.port.readBytes(newByteData, newByteData.length);
-				String newData = new String(newByteData);
-				SerialDataParser parser = new SerialDataParser(newData, this.thermostatDAO);
-				parser.parseData();
-			}
+			byte[] newByteData = new byte[numberOfBytesToRead];
+			this.port.readBytes(newByteData, newByteData.length);
+			String newData = new String(newByteData);
+			System.out.println(StringUtils.remove(newData, StringUtils.CR));
+				//SerialDataParser parser = new SerialDataParser(newData, this.thermostatDAO);
+				//parser.parseData();
 		} catch (Exception ex) {
 			System.err.println("Exception during parseData. Exception was:");
 			ex.printStackTrace(System.err);
