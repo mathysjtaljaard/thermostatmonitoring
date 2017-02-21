@@ -55,9 +55,7 @@ void loop() {
   if ( role == 0 ) {
     
     if( radio.available()){
-      // Variable for the received timestamp
-      DataCollection receivedData = readData();
-      sendResponse(receivedData);     
+      readData();
     }
   }
 
@@ -71,30 +69,10 @@ struct DataCollection readData() {
   }
      
   printData(receivedData);
-  return receivedData;
-}
-
-void sendResponse(struct DataCollection receivedData) {
-  DataCollection sendData;
-  radio.stopListening();                                    // First, stop listening so we can talk  
-  
-  sendData.fanOn = receivedData.fanOn;
-  sendData.heatOn = receivedData.heatOn;
-  sendData.coolOn = receivedData.coolOn;
-  sendData.auxHeatOn = receivedData.auxHeatOn;
-  sendData.temp = receivedData.temp;
-  sendData.statusCode = 200;
-  sendData.valuesLogged = 1;
-
-  if (isDebug) {
-    printData(sendData);
-  }
-  
-  radio.write( &sendData, sizeof(sendData) );              // Send the final one back.      
-  radio.startListening();                                  // Now, resume listening so we catch the next packets.
 }
 
 void printData(struct DataCollection data) {
+    
     String pipe = String(" | ");
     String fanStatusString = String("Fan On Status -> "); 
     String fanStatus= String(data.fanOn, DEC); 
@@ -112,8 +90,7 @@ void printData(struct DataCollection data) {
     String TempReading = String(data.temp, 3); 
     String TempCombo = String(TempReadingString + TempReading);
     String dataToWrite = String(fanCombo + HeatCombo +  ACCombo + AuxCombo + TempCombo);
-    char *p = const_cast<char*>(dataToWrite.c_str());
-    Serial.write(p);
+    Serial.println(dataToWrite);
 }
 
 
