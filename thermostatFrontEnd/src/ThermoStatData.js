@@ -10,7 +10,7 @@ class ThermostatData extends React.Component {
         super(props);
         this.state = {monitoringData: []};
         axios_instance = axios.create({
-            baseURL: 'http://192.168.1.10:8080'
+            baseURL: 'http://192.168.1.13:8080'
         });
     }
 
