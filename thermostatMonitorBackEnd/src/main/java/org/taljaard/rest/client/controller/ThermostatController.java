@@ -55,12 +55,6 @@ public class ThermostatController {
 			ThermostatData thermostatData = gson.fromJson(data, ThermostatData.class);
 			DateTime dt = ISODateTimeFormat.dateTime().parseDateTime(thermostatData.getCreateTimeISO());
 			thermostatData.setCreateTime(new Timestamp(dt.getMillis()));
-			System.out.println(thermostatData.isAcOn());
-			System.out.println(thermostatData.isFanOn());
-			System.out.println(thermostatData.isAuxHeatOn());
-			System.out.println(thermostatData.isHeatOn());
-			System.out.println(thermostatData.getTemperature());
-			System.out.println(thermostatData.getCreateTime());
 			thermostatData.setRawData(data);
 			service.saveData(thermostatData);
 			return "{'response': 'success'}";
