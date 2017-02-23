@@ -121,7 +121,6 @@ public class ThermostatData {
 
 	public void setCreateTime(Timestamp createTime) {
 		this.createTime = createTime;
-		this.createTimeISO = new DateTime(createTime.getTime()).toString();
 	}
 
 	public void setCreateTimeISO(String createTimeISO) {
