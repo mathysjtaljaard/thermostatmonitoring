@@ -10,10 +10,9 @@ import org.taljaard.dao.ThermostatDAO;
 import org.taljaard.dao.ThermostatDAOImpl;
 import org.taljaard.datasource.IDataSource;
 import org.taljaard.datasource.MySqlDataSource;
-import org.taljaard.serial.reader.app.SerialReaderApp;
 
 @SpringBootApplication
-@ComponentScan()
+@ComponentScan(basePackages="org.taljaard")
 public class ThermostatRestClient {
 
 	public static void main(String[] args) {
@@ -31,8 +30,4 @@ public class ThermostatRestClient {
 		return new ThermostatDAOImpl(dataSource);
 	}
 	
-	@Bean
-	SerialReaderApp serialReaderApp(ThermostatDAO thermostatDAO) {
-		return new SerialReaderApp(thermostatDAO);
-	}
 }

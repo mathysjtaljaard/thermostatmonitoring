@@ -76,19 +76,19 @@ void printData(struct DataCollection data) {
     String pipe = String(" | ");
     String fanStatusString = String("Fan On Status -> "); 
     String fanStatus= String(data.fanOn, DEC); 
-    String fanCombo = String(fanStatusString + fanStatus + pipe);
+    String fanCombo = String(fanStatus + pipe);
     String HeatStatusString = String("Heat On Status -> ");
     String HeatStatus = String(data.heatOn, DEC);
-    String HeatCombo = String(HeatStatusString + HeatStatus + pipe);
+    String HeatCombo = String(HeatStatus + pipe);
     String ACStatusString = String("Cooling On Status -> ");
     String ACStatus = String(data.coolOn, DEC);
-    String ACCombo = String(ACStatusString + ACStatus + pipe);
+    String ACCombo = String(ACStatus + pipe);
     String AuxStatusString = String("Aux Heat On Status -> ");
     String AuxStatus = String(data.auxHeatOn);
-    String AuxCombo = String(AuxStatusString + AuxStatus + pipe); 
+    String AuxCombo = String(AuxStatus + pipe); 
     String TempReadingString = String("Temperature (F) -> ");
     String TempReading = String(data.temp, 3); 
-    String TempCombo = String(TempReadingString + TempReading);
+    String TempCombo = String(TempReading);
     String dataToWrite = String(fanCombo + HeatCombo +  ACCombo + AuxCombo + TempCombo);
     Serial.println(dataToWrite);
 }
