@@ -2,22 +2,20 @@ package org.taljaard.model;
 
 import java.sql.Timestamp;
 
-import org.joda.time.DateTime;
-
 public class ThermostatData {
 
-	private boolean acOn;
+	private int acOn;
 	private int acOnCounter;
 	private Timestamp acOnTime;
-	private boolean auxHeatOn;
+	private int auxHeatOn;
 	private int auxHeatOnCounter;
 	private Timestamp auxHeatOnTime;
 	private Timestamp createTime;
 	private String createTimeISO;
-	private boolean fanOn;
+	private int fanOn;
 	private int fanOnCounter;
 	private Timestamp fanOnTime;
-	private boolean heatOn;
+	private int heatOn;
 	private int heatOnCounter;
 	private Timestamp heatOnTime;
 	private int id;
@@ -27,12 +25,20 @@ public class ThermostatData {
 	public ThermostatData() {
 	}
 
+	public int getAcOn() {
+		return acOn;
+	}
+
 	public int getAcOnCounter() {
 		return acOnCounter;
 	}
 
 	public Timestamp getAcOnTime() {
 		return acOnTime;
+	}
+
+	public int getAuxHeatOn() {
+		return auxHeatOn;
 	}
 
 	public int getAuxHeatOnCounter() {
@@ -51,6 +57,10 @@ public class ThermostatData {
 		return createTimeISO;
 	}
 
+	public int getFanOn() {
+		return fanOn;
+	}
+
 	public int getFanOnCounter() {
 		return fanOnCounter;
 	}
@@ -59,9 +69,14 @@ public class ThermostatData {
 		return fanOnTime;
 	}
 
+	public int getHeatOn() {
+		return heatOn;
+	}
+
 	public int getHeatOnCounter() {
 		return heatOnCounter;
 	}
+
 
 	public Timestamp getHeatOnTime() {
 		return heatOnTime;
@@ -79,23 +94,7 @@ public class ThermostatData {
 		return temperature;
 	}
 
-	public boolean isAcOn() {
-		return acOn;
-	}
-
-	public boolean isAuxHeatOn() {
-		return auxHeatOn;
-	}
-
-	public boolean isFanOn() {
-		return fanOn;
-	}
-
-	public boolean isHeatOn() {
-		return heatOn;
-	}
-
-	public void setAcOn(boolean acOn) {
+	public void setAcOn(int acOn) {
 		this.acOn = acOn;
 	}
 
@@ -107,7 +106,7 @@ public class ThermostatData {
 		this.acOnTime = acOnTime;
 	}
 
-	public void setAuxHeatOn(boolean auxHeatOn) {
+	public void setAuxHeatOn(int auxHeatOn) {
 		this.auxHeatOn = auxHeatOn;
 	}
 
@@ -122,12 +121,12 @@ public class ThermostatData {
 	public void setCreateTime(Timestamp createTime) {
 		this.createTime = createTime;
 	}
-
+	
 	public void setCreateTimeISO(String createTimeISO) {
 		this.createTimeISO = createTimeISO;
 	}
 
-	public void setFanOn(boolean fanOn) {
+	public void setFanOn(int fanOn) {
 		this.fanOn = fanOn;
 	}
 
@@ -139,7 +138,7 @@ public class ThermostatData {
 		this.fanOnTime = fanOnTime;
 	}
 
-	public void setHeatOn(boolean heatOn) {
+	public void setHeatOn(int heatOn) {
 		this.heatOn = heatOn;
 	}
 
@@ -154,7 +153,7 @@ public class ThermostatData {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+
 	public void setRawData(String rawData) {
 		this.rawData = rawData;
 	}
@@ -166,10 +165,10 @@ public class ThermostatData {
 	public String toString() {
 		StringBuilder builder = new StringBuilder("Data: ");
 		builder.append("Create Time: " + getCreateTime() + "\n");
-		builder.append("Is Fan on: " + isFanOn() + "\n");
-		builder.append("Is Heat on: " + isHeatOn() + "\n");
-		builder.append("Is Aux on: " + isAuxHeatOn() + "\n");
-		builder.append("Is AC on: " + isAcOn() + "\n");
+		builder.append("Is Fan on: " + getFanOn() + "\n");
+		builder.append("Is Heat on: " + getHeatOn() + "\n");
+		builder.append("Is Aux on: " + getAuxHeatOn() + "\n");
+		builder.append("Is AC on: " + getAcOn() + "\n");
 		builder.append("Temperature : " + getTemperature() + "\n");
 		
 		return builder.toString();

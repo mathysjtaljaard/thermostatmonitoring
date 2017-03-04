@@ -42,10 +42,10 @@ public class ThermostatServices {
     	try {
 	    	ThermostatData storedRecored = collectLastDataEntry();
 			
-			boolean hasFanOnStatusChanged = (recievedData.isFanOn() != storedRecored.isFanOn());
-			boolean hasHeatOnStatusChanged = (recievedData.isHeatOn() != storedRecored.isHeatOn());
-			boolean hasAuxHeatOnStatusChanged = (recievedData.isAuxHeatOn() != storedRecored.isAuxHeatOn());
-			boolean hasAcOnStatusChanged = (recievedData.isAcOn() != storedRecored.isAcOn());
+			boolean hasFanOnStatusChanged = (recievedData.getFanOn() != storedRecored.getFanOn());
+			boolean hasHeatOnStatusChanged = (recievedData.getHeatOn() != storedRecored.getHeatOn());
+			boolean hasAuxHeatOnStatusChanged = (recievedData.getAuxHeatOn() != storedRecored.getAuxHeatOn());
+			boolean hasAcOnStatusChanged = (recievedData.getAcOn() != storedRecored.getAcOn());
 			boolean hasTemperatureChanged = false;
 			
 			double diff = storedRecored.getTemperature() - recievedData.getTemperature();
